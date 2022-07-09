@@ -4,9 +4,21 @@ const { Product, Category, Tag, ProductTag } = require("../../models");
 const findAllProducts = async (req, res) => {
   // be sure to include its associated Category and Tag data
   try {
-  } catch (error) {
-    console.log(`[ERROR: Failed to find all products| ${error.message}]}`);
+    //find all the products
+    const allProducts = await Product.findAll({
+      include: [{ model: Category }, { model: Tag }],
+    });
 
+    //check if there are any products
+    if (!allProducts) {
+      return res.status(404).json({
+        error: "There are no products in the table",
+      });
+    }
+
+    //return product if successful
+    return res.status(200).json(allProducts);
+  } catch (error) {
     return res.status(500).json({
       success: false,
       error: "Failed to find all products",
@@ -18,12 +30,24 @@ const findAllProducts = async (req, res) => {
 const findSingleProduct = async (req, res) => {
   // be sure to include its associated Category and Tag data
   try {
-  } catch (error) {
-    console.log(`[ERROR: Failed to find product by id| ${error.message}]}`);
+    //get the product id
+    const { id } = req.params;
+    //search for product id in table
+    const product = await Product.findByPk(id, {
+      include: [{ model: Category }, { model: Tag }],
+    });
 
+    //check if product id exists
+    if (!product) {
+      return res.status(404).json({ message: `The Product with id ${id} has not been found` });
+    }
+
+    //return the results
+    return res.status(200).json(product);
+  } catch (error) {
     return res.status(500).json({
       success: false,
-      error: "Failed to find product",
+      error: "Failed to find a product using the specified id",
     });
   }
 };
@@ -106,9 +130,21 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   // delete one product by its `id` value
   try {
-  } catch (error) {
-    console.log(`[ERROR: Failed to delete product| ${error.message}]}`);
+    //get the id from param arg
+    const { id } = req.params;
+    //find all products using id
+    const product = await Product.findByPk(id);
 
+    //check if product exists
+    if (!product) {
+      return res.status(404).json({
+        message: `Product with the id ${id} thus not exist in the table`,
+      });
+    }
+    // delete the product
+    await Product.destroy({ where: { id } });
+    return res.status(200).json({ message: `Product with id ${id}  has been deleted` });
+  } catch (error) {
     return res.status(500).json({
       success: false,
       error: "Failed to delete product",
