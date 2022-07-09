@@ -143,6 +143,7 @@ const deleteProduct = async (req, res) => {
     }
     // delete the product
     await Product.destroy({ where: { id } });
+
     return res.status(200).json({ message: `Product with id ${id}  has been deleted` });
   } catch (error) {
     return res.status(500).json({
