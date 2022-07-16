@@ -30,6 +30,7 @@ THEN I am able to successfully create, update, and delete data in my database
 
 ## Video
 
-The following animation shows the application's GET routes to return all categories, all products, and all tags being tested in Insomnia:
+The following animation shows the application's GET routes to return all categories, all products, and all tags being tested in postman:
 
 ![Video explaining the functionality”.](./assets/video/e-commerce.mp4)
+[Video Link](https://drive.google.com/file/d/127dMzqRor-XxlWrwr-6erylQd9zuGUPn/view?usp=sharing)
